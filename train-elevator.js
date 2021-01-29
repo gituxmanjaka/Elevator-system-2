@@ -11,11 +11,26 @@ stages.forEach(stage => {
 
         const currentPosition = parseInt(document.querySelector('#command .there').innerText);
         const destination = parseInt(this.innerText);
-        const distance = Math.abs(currentPosition - destination);
+        const distance = currentPosition - destination;
 
-        document.querySelector('#command .there').classList.remove('there');
-        move(destination, distance);
-        this.classList.add('there');
+        const controlEffect = setInterval(() => {
+            const cur = document.querySelector('#command .there');
+            if (parseInt(cur.innerText) === destination) {
+                clearInterval(controlEffect);
+                return;
+            }
+            for (let index = 0; index < stages.length; index++) {
+                const element = stages[index];
+                if (element.classList.contains('there')) {
+                    distance < 0 ?
+                        stages[index+1].classList.add('there') :
+                        stages[index-1].classList.add('there');
+                    cur.classList.remove('there');
+                    return;
+                }
+            }
+        }, 1500);
+        move(destination, Math.abs(distance));
     });
 });
 
